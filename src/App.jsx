@@ -19,19 +19,24 @@ function App({isSpecial}) {
   const [specialStyle,setspecailStyle] = useState();
 
 
+  let time = new Date();
+  let hour = time.getHours();
+  console.log(hour);
+
+
   
-
-
-  const options = {
-    method: 'GET',
-    headers: {
-      'X-RapidAPI-Key': '7e57b8f0d2msh79692790ac4fa1fp1f7c4ajsnb626322a46f9',
-      'X-RapidAPI-Host': 'weather-by-api-ninjas.p.rapidapi.com',
-    },
-  };
 
   async function getData() {
    try{
+
+    const options = {
+      method: 'GET',
+      headers: {
+        'X-RapidAPI-Key': '7e57b8f0d2msh79692790ac4fa1fp1f7c4ajsnb626322a46f9',
+        'X-RapidAPI-Host': 'weather-by-api-ninjas.p.rapidapi.com',
+      },
+    };
+
     console.log(input);
     const req = await fetch(`https://weather-by-api-ninjas.p.rapidapi.com/v1/weather?city=${input}`, options);
     
@@ -43,26 +48,47 @@ function App({isSpecial}) {
       setfeellike(res.feels_like);
       setwindspeed(res.wind_speed);
       // setting images according temp
-
-      if(temp<20){
-        setimgchange("./img/Haze.png")
-        setspecailStyle({backgroundColor:"rgb(39, 42, 46)"})
-        
+      
+    
+      if(hour>18){
+        console.log("good eveing");
+        if(temp<15){
+          setimgchange("./img/Haze.png")
+          setspecailStyle({backgroundColor:"rgb(39, 42, 46)"})  
+          
+        }
+        else{
+          setimgchange("./img/moon.png")
+          setspecailStyle({backgroundColor:"rgb(28 32 37)"})
+        }
       }
+      else if(hour > 6 && hour <=18){
+         if(temp>=20){
+           setimgchange("./img/Clean.png")
+          setspecailStyle({backgroundColor:"rgb(30, 126, 255)"})
+        }
+        else if(temp < 20){
+          setimgchange("./img/Haze.png")
+          setspecailStyle({backgroundColor:"rgb(39, 42, 46)"}) 
+        }
+      }
+    
+
       let cityn = input;  
       let name = cityn.charAt(0).toUpperCase() + cityn.slice(1)      
 
       setcityname(name)  
       setisresult(true)  
       setisvisible(false)
-      
+      seterrorvisible(false)
       
      
     }
     else{
-     
       
-      setisvisible(false)
+      setimgchange("./img/home.png")
+      setspecailStyle({backgroundColor:"rgb(15 23 42)"})
+      setisvisible(true)
       setisresult(false) 
       seterrorvisible(true);
       seterror("Not found")
